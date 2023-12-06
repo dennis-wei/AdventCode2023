@@ -11,12 +11,6 @@ defmodule Day5 do
       # .line_of_ints(filename)
   end
 
-  def get_all_nums(s) do
-    Regex.scan(~r/\d+/, s)
-      |> List.flatten
-      |> Enum.map(&String.to_integer/1)
-  end
-
   def apply_translations(s, translations) do
     Enum.reduce_while(translations, s, fn [destination, source, range], _acc ->
       cond do
@@ -60,8 +54,8 @@ defmodule Day5 do
 
   def solve(test \\ false) do
     input = get_input(test)
-    p1_input = input |> Enum.at(0) |> Enum.at(0) |> get_all_nums
-    translations = Enum.map(tl(input), fn t -> tl(t) |> Enum.map(fn r -> get_all_nums(r) end) end)
+    p1_input = input |> Enum.at(0) |> Enum.at(0) |> Utils.get_all_nums
+    translations = Enum.map(tl(input), fn t -> tl(t) |> Enum.map(fn r -> Utils.get_all_nums(r) end) end)
     part1 = run(p1_input, translations)
       |> Enum.min
 

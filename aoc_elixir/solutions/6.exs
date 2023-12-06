@@ -11,12 +11,6 @@ defmodule Day6 do
       # .line_of_ints(filename)
   end
 
-  def get_all_nums(s) do
-    Regex.scan(~r/\d+/, s)
-      |> List.flatten
-      |> Enum.map(&String.to_integer/1)
-  end
-
   def run(times, distance_records) do
     zipped = Enum.zip(times, distance_records)
     num_wins = zipped
@@ -41,8 +35,8 @@ defmodule Day6 do
 
   def solve(test \\ false) do
     input = get_input(test)
-    times = input |> Enum.at(0) |> get_all_nums
-    distance_records = input |> Enum.at(1) |> get_all_nums
+    times = input |> Enum.at(0) |> Utils.get_all_nums
+    distance_records = input |> Enum.at(1) |> Utils.get_all_nums
     part1 = run(times, distance_records)
 
     combined_times = combine(times)
