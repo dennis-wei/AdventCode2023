@@ -35,6 +35,11 @@ defmodule Input do
       |> Enum.map(fn r -> String.split(r, sep1) end)
   end
 
+  def ints_in_lines(filename, sep \\ "\n", trim \\ true) do
+    lines(filename, sep, trim)
+      |> Enum.map(fn r -> Utils.get_all_nums(r) end)
+  end
+
   def ints(filename) do
     lines(filename)
       |> Enum.map(&String.to_integer/1)

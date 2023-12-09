@@ -14,6 +14,7 @@ defmodule Day{day} do
       # .line_tokens(filename)
       # .lines(filename)
       # .line_of_ints(filename)
+      # .ints_in_lines(filename)
   end
 
   def solve(test \\\ false) do

@@ -7,8 +7,9 @@ defmodule Day9 do
     Input
       # .ints(filename)
       # .line_tokens(filename)
-      .lines(filename)
+      # .lines(filename)
       # .line_of_ints(filename)
+      .ints_in_lines(filename)
   end
 
   def run_history(nums, part2 \\ false) do
@@ -37,7 +38,6 @@ defmodule Day9 do
 
   def solve(test \\ false) do
     input = get_input(test)
-      |> Enum.map(fn line -> Utils.get_all_nums(line) end)
     part1 = Enum.map(input, fn nums -> run_history(nums, false) end)
       |> Enum.sum
     part2 = Enum.map(input, fn nums -> run_history(nums, true) end)
