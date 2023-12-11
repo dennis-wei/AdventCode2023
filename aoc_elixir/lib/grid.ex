@@ -1,18 +1,21 @@
 defmodule Grid do
-  def to_map(glist) do
+  def to_map(glist, invert \\ false) do
     Map.new(glist, fn ent ->
       {n, r, c} = ent
-      {{r, c}, n}
+      cond do
+        invert -> {{c, r}, n}
+        true -> {{r, c}, n}
+      end
     end)
   end
 
-  def make_grid(rows) do
+  def make_grid(rows, invert \\ false) do
     as_list = rows
       |> Enum.map(&Enum.with_index/1)
       |> then(&Enum.with_index/1)
       |> Enum.flat_map(fn {row, ridx} -> Enum.map(row, fn e -> Tuple.insert_at(e, 1, ridx) end) end)
 
-    to_map(as_list)
+    to_map(as_list, invert)
   end
 
   @neighbors [{0, 1}, {0, -1}, {1, 0}, {-1, 0}]
@@ -29,6 +32,16 @@ defmodule Grid do
       adj = {x + dx, y + dy}
       case Map.get(grid, adj) do
         nil -> acc
+        n -> Map.put(acc, adj, n)
+      end
+    end)
+  end
+
+  def get_neighbors_padded(grid, {x, y}, default, diagonal \\ false) do
+    Enum.reduce(neighbors(diagonal), %{}, fn ({dx, dy}, acc) ->
+      adj = {x + dx, y + dy}
+      case Map.get(grid, adj) do
+        nil -> Map.put(acc, adj, default)
         n -> Map.put(acc, adj, n)
       end
     end)
