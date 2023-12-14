@@ -18,6 +18,19 @@ defmodule Grid do
     to_map(as_list, invert)
   end
 
+  def make_grid_with_size(rows, invert \\ false) do
+    as_list = rows
+      |> Enum.map(&Enum.with_index/1)
+      |> then(&Enum.with_index/1)
+      |> Enum.flat_map(fn {row, ridx} -> Enum.map(row, fn e -> Tuple.insert_at(e, 1, ridx) end) end)
+
+    size = cond do
+      invert -> {Enum.count(hd(rows)), Enum.count(rows)}
+      true -> {Enum.count(rows), Enum.count(hd(rows))}
+    end
+    {to_map(as_list, invert), size}
+  end
+
   @neighbors [{0, 1}, {0, -1}, {1, 0}, {-1, 0}]
   @neighbors_diag [{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}]
   def neighbors(diagonal \\ false) do
