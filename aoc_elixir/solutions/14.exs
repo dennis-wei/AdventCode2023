@@ -22,34 +22,18 @@ defmodule Day14 do
   end
 
   def tilt(str) do
-    Enum.reduce(0..String.length(str)-1, str, fn i, acc ->
-      c = String.at(acc, i)
-      case c do
-        "." ->
-          slice = String.slice(acc, i+1..-1)
-          {next_round, _} = slice
-            |> :binary.match("O")
-            |> case do
-              :nomatch -> {:nomatch, nil}
-              t -> t
-            end
-          {next_cube, _} = slice
-            |> :binary.match("#")
-            |> case do
-              :nomatch -> {String.length(str), nil}
-              n -> n
-            end
-          cond do
-            next_round == :nomatch -> acc
-            next_cube < next_round -> acc
-            next_round < next_cube -> swap(acc, i, next_round+i+1)
-            true -> raise "Invalid stat"
-          end
-        "O" -> acc
-        "#" -> acc
-        _ -> raise "Invalid char #{c}"
-      end
+    split = String.split(str, "#")
+    Enum.map(split, fn s ->
+      {numO, numDot} = Enum.reduce(String.graphemes(s), {0, 0}, fn c, {oacc, dacc} ->
+        case c do
+          "O" -> {oacc+1, dacc}
+          "." -> {oacc, dacc+1}
+          _ -> raise "Invalid char #{c}"
+        end
+      end)
+      String.duplicate("O", numO) <> String.duplicate(".", numDot)
     end)
+      |> Enum.join("#")
   end
 
   def tilt(grid, {dx, dy}, dir) do
